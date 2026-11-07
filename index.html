@@ -1,1 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AFGHAN HEART</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--mut:#666;--card:#f6f3f4;--pri:#c0143c;--bd:#ddd}
+@media(prefers-color-scheme:dark){:root{--bg:#121212;--fg:#f2f2f2;--mut:#aaa;--card:#1e1e1e;--pri:#e0305a;--bd:#333}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Arial,sans-serif;background:var(--bg);color:var(--fg);display:flex;justify-content:center;min-height:100vh}
+.wrap{width:100%;max-width:420px;padding:24px}
+h1{color:var(--pri);text-align:center;margin:24px 0 4px;letter-spacing:1px}
+.sub{text-align:center;color:var(--mut);margin-bottom:24px}
+.card{background:var(--card);border-radius:14px;padding:18px}
+label{display:block;font-size:14px;margin:12px 0 4px;color:var(--mut)}
+input,select{width:100%;padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--fg);font-size:16px}
+button{width:100%;margin-top:16px;padding:13px;border:0;border-radius:10px;background:var(--pri);color:#fff;font-size:16px;font-weight:600}
+button.link{background:none;color:var(--pri);margin-top:8px}
+button:disabled{opacity:.5}
+.msg{margin-top:12px;font-size:14px;min-height:18px}
+.err{color:#d33}.ok{color:#2a9d4b}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AFGHAN HEART</h1>
+  <div class="sub">Friendship &amp; marriage network</div>
+  <div class="card">
 
+    <div id="s1">
+      <label>Email</label>
+      <input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+      <button id="send">Send email</button>
+    </div>
+
+    <div id="s2" class="hide">
+      <p>We sent you an email. Open it and tap the <b>Sign in</b> link. If your email contains a code instead, enter it below.</p>
+      <label>Code (optional)</label>
+      <input id="code" inputmode="numeric" maxlength="8" placeholder="123456">
+      <button id="verify">Verify</button>
+      <button class="link" id="resend" disabled>Resend</button>
+    </div>
+
+    <div id="s3" class="hide">
+      <label>First name</label><input id="fn">
+      <label>Last name</label><input id="ln">
+      <label>Unique ID (letters, numbers, _ ; 3-32)</label><input id="pid" autocapitalize="none">
+      <label>Date of birth</label><input id="bd" type="date">
+      <label>Gender</label>
+      <select id="gd"><option value="">Select</option><option>male</option><option>female</option></select>
+      <label>Country</label><input id="co">
+      <label>City</label><input id="ci">
+      <button id="save">Create account</button>
+    </div>
+
+    <div id="s4" class="hide">
+      <h3 id="hello"></h3>
+      <p id="info" style="color:var(--mut)"></p>
+      <button id="out">Sign out</button>
+    </div>
+
+    <div id="msg" class="msg"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://akgzcbxyrxvbejpntjni.supabase.co";
+const SUPABASE_KEY = "sb_publishable_trN9jpIvdd9b3mciBsxdbQ_zNLO_kqY";
+const MIN_AGE = 18;
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+let email = "", timer = null;
+
+function show(n){["s1","s2","s3","s4"].forEach(s=>$(s).classList.toggle("hide",s!=="s"+n));}
+function say(t,ok){const m=$("msg");m.textContent=t||"";m.className="msg "+(ok?"ok":"err");}
+function cooldown(sec){
+  const b=$("resend");b.disabled=true;let s=sec;clearInterval(timer);
+  timer=setInterval(()=>{b.textContent=s>0?`Resend (${s})`:"Resend";if(s--<=0){clearInterval(timer);b.disabled=false;}},1000);
+}
+function age(d){const b=new Date(d),n=new Date();let a=n.getFullYear()-b.getFullYear();
+  if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a;}
+
+async function sendCode(){
+  email=$("email").value.trim().toLowerCase();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return say("Enter a valid email.");
+  $("send").disabled=true;say("");
+  const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:window.location.origin+window.location.pathname}});
+  $("send").disabled=false;
+  if(error)return say(error.message);
+  show(2);cooldown(60);say("Email sent. Check your inbox and spam.",true);
+}
+$("send").onclick=sendCode;
+$("resend").onclick=sendCode;
+
+$("verify").onclick=async()=>{
+  const token=$("code").value.trim();
+  if(token.length<6)return say("Enter the code.");
+  $("verify").disabled=true;
+  const {data,error}=await sb.auth.verifyOtp({email,token,type:"email"});
+  $("verify").disabled=false;
+  if(error)return say("Invalid or expired code.");
+  say("");route(data.user);
+};
+
+async function route(user){
+  const {data}=await sb.from("profiles").select("*").eq("id",user.id).maybeSingle();
+  if(!data){show(3);return;}
+  if(data.is_banned){await sb.auth.signOut();show(1);return say("This account is banned.");}
+  $("hello").textContent=`Welcome, ${data.first_name||""} ${data.last_name||""}`;
+  $("info").textContent=`ID: @${data.public_id} · ${data.country||""} ${data.city||""}`;
+  show(4);
+}
+
+$("save").onclick=async()=>{
+  const v={first_name:$("fn").value.trim(),last_name:$("ln").value.trim(),
+    public_id:$("pid").value.trim(),birth_date:$("bd").value,gender:$("gd").value,
+    country:$("co").value.trim(),city:$("ci").value.trim()};
+  if(!v.first_name||!v.last_name)return say("Enter first and last name.");
+  if(!/^[A-Za-z0-9_]{3,32}$/.test(v.public_id))return say("ID must be 3-32 letters, numbers or _.");
+  if(!v.birth_date)return say("Enter date of birth.");
+  if(age(v.birth_date)<MIN_AGE)return say(`You must be at least ${MIN_AGE} years old.`);
+  const {data:{user}}=await sb.auth.getUser();
+  if(!user)return say("Session expired. Sign in again.");
+  $("save").disabled=true;
+  const {error}=await sb.from("profiles").insert({id:user.id,...v});
+  $("save").disabled=false;
+  if(error){
+    if(error.code==="23505")return say("This ID is already taken.");
+    if(/reserved/i.test(error.message))return say("This ID is reserved.");
+    return say(error.message);
+  }
+  say("");route(user);
+};
+
+$("out").onclick=async()=>{await sb.auth.signOut();show(1);say("");};
+
+(async()=>{
+  const {data:{session}}=await sb.auth.getSession();
+  if(session)route(session.user);
+})();
+</script>
+</body>
+</html>
