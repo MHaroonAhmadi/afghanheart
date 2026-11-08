@@ -320,4 +320,14 @@ function people(box){
 async function settings(box){
   const u=(await sb.auth.getUser()).data.user;
   box.append(row(((prof.first_name||'')+' '+(prof.last_name||'')).trim(),'@'+prof.public_id+' · '+(u?u.email:''),prof.avatar_url));
-  co
+  const b=document.createElement('button');b.className='btn g';b.textContent=t('out');
+  b.onclick=async()=>{await sb.auth.signOut();uid=null;prof=null;location.reload();};
+  box.append(b);
+}
+
+/* ---------- start ---------- */
+applyLang();go(0);
+(async()=>{const {data:{session}}=await sb.auth.getSession();if(session)after(session.user);})();
+</script>
+</body>
+</html>
