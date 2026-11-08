@@ -2,145 +2,322 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AFGHAN HEART</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Newgram</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
-:root{--bg:#fff;--fg:#1a1a1a;--mut:#666;--card:#f6f3f4;--pri:#c0143c;--bd:#ddd}
-@media(prefers-color-scheme:dark){:root{--bg:#121212;--fg:#f2f2f2;--mut:#aaa;--card:#1e1e1e;--pri:#e0305a;--bd:#333}}
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,Arial,sans-serif;background:var(--bg);color:var(--fg);display:flex;justify-content:center;min-height:100vh}
-.wrap{width:100%;max-width:420px;padding:24px}
-h1{color:var(--pri);text-align:center;margin:24px 0 4px;letter-spacing:1px}
-.sub{text-align:center;color:var(--mut);margin-bottom:24px}
-.card{background:var(--card);border-radius:14px;padding:18px}
-label{display:block;font-size:14px;margin:12px 0 4px;color:var(--mut)}
-input,select{width:100%;padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--fg);font-size:16px}
-button{width:100%;margin-top:16px;padding:13px;border:0;border-radius:10px;background:var(--pri);color:#fff;font-size:16px;font-weight:600}
-button.link{background:none;color:var(--pri);margin-top:8px}
-button:disabled{opacity:.5}
-.msg{margin-top:12px;font-size:14px;min-height:18px}
-.err{color:#d33}.ok{color:#2a9d4b}
-.hide{display:none}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#06100c;color:#f3f7f4;font-family:system-ui,Tahoma,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;display:none}.bg svg{width:100%;height:100%}.bg.on{display:block}
+.s{position:fixed;inset:0;display:none;flex-direction:column;padding:12px 18px 16px;overflow:auto}
+.s.on{display:flex}
+#s5{background:linear-gradient(#0a1a12,#060c09);padding:12px 0 0}
+.logo{text-align:center;font-weight:800;letter-spacing:4px;font-size:22px;margin-top:10px;text-shadow:0 2px 14px #000}
+.glass{background:rgba(8,20,14,.58);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.18);border-radius:24px;padding:20px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.mid{margin:auto 0}.end{margin-top:auto}
+h2{margin:0 0 6px;text-align:center;font-size:20px}
+.sub{text-align:center;color:#c9d6cd;font-size:14px;margin-bottom:6px}
+input{width:100%;padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.4);color:#fff;font-size:17px;margin-top:10px;text-align:center}
+.btn{padding:14px;border:0;border-radius:14px;font-weight:700;font-size:16px;color:#fff;background:linear-gradient(135deg,#ff8a1f,#e2461b);box-shadow:0 6px 20px rgba(226,70,27,.45);width:100%;margin-top:12px}
+.btn.g{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);box-shadow:none}
+.btn:disabled{opacity:.45}
+.bar{display:flex;gap:10px;margin-top:auto;padding-bottom:6px}.bar .btn{flex:1}
+.msg{min-height:20px;text-align:center;font-size:14px;margin-top:8px}
+.leaves{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-height:38vh;overflow:auto;padding:6px}
+.leaf{padding:10px 16px;border-radius:0 18px 0 18px;background:linear-gradient(135deg,#2f8f3e,#145c25);border:1px solid #7fe08e66;color:#eaffee;font-weight:600;font-size:15px;transform:rotate(-3deg)}
+.leaf:nth-child(even){transform:rotate(3deg);border-radius:18px 0 18px 0}
+.leaf.sel{background:linear-gradient(135deg,#ffc53a,#e2761b);color:#2a1300;box-shadow:0 0 18px #ffb52e}
+.pv{width:130px;height:130px;border-radius:50%;margin:8px auto;background:#223a2c center/cover;border:3px solid #ffb52e;display:flex;align-items:center;justify-content:center;font-size:44px}
+#list{flex:1;overflow:auto;padding:8px 14px}
+.row{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;background:rgba(255,255,255,.06);margin-bottom:8px}
+.av{width:46px;height:46px;border-radius:50%;background:#2f8f3e center/cover;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.row small{color:#9fb3a6;display:block}
+.note{text-align:center;color:#9fb3a6;padding:30px 10px}
+#nav{display:flex;background:#0d1f16;border-top:1px solid #ffffff22;padding-bottom:6px}
+#nav button{flex:1;padding:14px 4px;background:none;border:0;color:#9fb3a6;font-size:13px}
+#nav button.on{color:#ffb52e;font-weight:700}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>AFGHAN HEART</h1>
-  <div class="sub">Friendship &amp; marriage network</div>
-  <div class="card">
+<div class="bg" id="bg0"></div><div class="bg" id="bg1"></div><div class="bg" id="bg2"></div>
 
-    <div id="s1">
-      <label>Email</label>
-      <input id="email" type="email" autocomplete="email" placeholder="you@example.com">
-      <button id="send">Send email</button>
-    </div>
+<div class="s on" id="s0">
+  <div class="logo">NEWGRAM</div>
+  <div class="end">
+    <h2 data-t="pick"></h2>
+    <div class="leaves" id="leaves"></div>
+    <button class="btn" id="goLang" disabled data-t="go"></button>
+  </div>
+</div>
 
-    <div id="s2" class="hide">
-      <p>We sent you an email. Open it and tap the <b>Sign in</b> link. If your email contains a code instead, enter it below.</p>
-      <label>Code (optional)</label>
-      <input id="code" inputmode="numeric" maxlength="8" placeholder="123456">
-      <button id="verify">Verify</button>
-      <button class="link" id="resend" disabled>Resend</button>
-    </div>
+<div class="s" id="s1">
+  <div class="logo">NEWGRAM</div>
+  <div class="mid glass">
+    <h2 data-t="identity"></h2>
+    <input id="em" type="email" autocomplete="email" placeholder="you@example.com">
+    <div class="msg" id="m1"></div>
+  </div>
+  <div class="bar">
+    <button class="btn g" id="editMail" data-t="edit"></button>
+    <button class="btn" id="confirm" data-t="confirm"></button>
+  </div>
+</div>
 
-    <div id="s3" class="hide">
-      <label>First name</label><input id="fn">
-      <label>Last name</label><input id="ln">
-      <label>Unique ID (letters, numbers, _ ; 3-32)</label><input id="pid" autocapitalize="none">
-      <label>Date of birth</label><input id="bd" type="date">
-      <label>Gender</label>
-      <select id="gd"><option value="">Select</option><option>male</option><option>female</option></select>
-      <label>Country</label><input id="co">
-      <label>City</label><input id="ci">
-      <button id="save">Create account</button>
-    </div>
+<div class="s" id="s2">
+  <div class="logo">NEWGRAM</div>
+  <div class="mid glass">
+    <h2 data-t="wait"></h2>
+    <div class="sub" id="mailShow"></div>
+    <input id="code" inputmode="numeric" maxlength="8" data-p="codeph">
+    <button class="btn" id="verify" data-t="verify"></button>
+    <div class="msg" id="m2"></div>
+  </div>
+  <div class="bar">
+    <button class="btn g" id="back2" data-t="edit"></button>
+    <button class="btn g" id="resend" data-t="confirm"></button>
+  </div>
+</div>
 
-    <div id="s4" class="hide">
-      <h3 id="hello"></h3>
-      <p id="info" style="color:var(--mut)"></p>
-      <button id="out">Sign out</button>
-    </div>
+<div class="s" id="s3">
+  <div class="logo">NEWGRAM</div>
+  <div class="mid glass">
+    <input id="fn" data-p="first" autocomplete="given-name">
+    <input id="ln" data-p="last" autocomplete="family-name">
+    <div class="msg" id="m3"></div>
+  </div>
+  <div class="bar"><button class="btn" id="next" data-t="next"></button></div>
+</div>
 
-    <div id="msg" class="msg"></div>
+<div class="s" id="s4">
+  <div class="logo">NEWGRAM</div>
+  <div class="mid glass">
+    <h2 data-t="photo"></h2>
+    <div class="pv" id="pv">📷</div>
+    <input id="file" type="file" accept="image/*" style="display:none">
+    <button class="btn g" id="choose" data-t="choose"></button>
+    <div class="msg" id="m4"></div>
+  </div>
+  <div class="bar">
+    <button class="btn g" id="skip" data-t="skip"></button>
+    <button class="btn" id="finish" data-t="finish"></button>
+  </div>
+</div>
+
+<div class="s" id="s5">
+  <div class="logo">NEWGRAM</div>
+  <div id="list"></div>
+  <div id="nav">
+    <button data-t="ch"></button><button data-t="gr"></button>
+    <button data-t="pe"></button><button data-t="se"></button>
   </div>
 </div>
 
 <script>
-const SUPABASE_URL = "https://akgzcbxyrxvbejpntjni.supabase.co";
-const SUPABASE_KEY = "sb_publishable_trN9jpIvdd9b3mciBsxdbQ_zNLO_kqY";
-const MIN_AGE = 18;
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-const $ = id => document.getElementById(id);
-let email = "", timer = null;
+const sb=supabase.createClient("https://akgzcbxyrxvbejpntjni.supabase.co","sb_publishable_trN9jpIvdd9b3mciBsxdbQ_zNLO_kqY");
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let L='en',email='',uid=null,prof=null,pfile=null,tm=null;
 
-function show(n){["s1","s2","s3","s4"].forEach(s=>$(s).classList.toggle("hide",s!=="s"+n));}
-function say(t,ok){const m=$("msg");m.textContent=t||"";m.className="msg "+(ok?"ok":"err");}
-function cooldown(sec){
-  const b=$("resend");b.disabled=true;let s=sec;clearInterval(timer);
-  timer=setInterval(()=>{b.textContent=s>0?`Resend (${s})`:"Resend";if(s--<=0){clearInterval(timer);b.disabled=false;}},1000);
+/* ---------- languages ---------- */
+const K="pick go identity edit confirm wait codeph verify first last next photo choose finish skip ch gr pe se out".split(' ');
+const T={
+en:"Choose your language|Continue|Identity|Edit email|Confirm email|Waiting for your confirmation code|Verification code|Verify|First name|Last name|Next|Profile photo|Choose photo|Finish|Skip|Channels|Groups|People|Settings|Sign out",
+fa:"زبان خود را انتخاب کنید|ادامه|احراز هویت|ویرایش ایمیل|تأیید ایمیل|منتظر کد تأیید شما هستیم|کد تأیید|تأیید|نام|نام خانوادگی|بعدی|عکس پروفایل|انتخاب عکس|پایان|رد کردن|کانال‌ها|گروه‌ها|مخاطبان|تنظیمات|خروج",
+ps:"خپله ژبه وټاکئ|دوام|پېژندنه|بریښنالیک سمول|بریښنالیک تایید کړئ|ستاسو د تایید کوډ ته انتظار|د تایید کوډ|تایید|نوم|تخلص|بل|د پروفایل انځور|انځور وټاکئ|پای|پریږدئ|چینلونه|ډلې|خلک|تنظیمات|وتل",
+ar:"اختر لغتك|متابعة|التحقق من الهوية|تعديل البريد|تأكيد البريد|بانتظار رمز التأكيد|رمز التحقق|تحقق|الاسم|اسم العائلة|التالي|صورة الملف الشخصي|اختيار صورة|إنهاء|تخطي|القنوات|المجموعات|الأشخاص|الإعدادات|تسجيل الخروج",
+ur:"اپنی زبان منتخب کریں|جاری رکھیں|شناخت|ای میل میں ترمیم|ای میل کی تصدیق|آپ کے تصدیقی کوڈ کا انتظار|تصدیقی کوڈ|تصدیق|پہلا نام|آخری نام|اگلا|پروفائل تصویر|تصویر منتخب کریں|مکمل|چھوڑیں|چینلز|گروپس|لوگ|ترتیبات|لاگ آؤٹ",
+zh:"选择语言|继续|身份验证|修改邮箱|确认邮箱|等待您的验证码|验证码|验证|名|姓|下一步|头像|选择照片|完成|跳过|频道|群组|联系人|设置|退出",
+tr:"Dilinizi seçin|Devam|Kimlik|E-postayı düzenle|E-postayı onayla|Doğrulama kodunuz bekleniyor|Doğrulama kodu|Doğrula|Ad|Soyad|İleri|Profil fotoğrafı|Fotoğraf seç|Bitir|Atla|Kanallar|Gruplar|Kişiler|Ayarlar|Çıkış",
+ru:"Выберите язык|Продолжить|Идентификация|Изменить почту|Подтвердить почту|Ожидаем код подтверждения|Код подтверждения|Проверить|Имя|Фамилия|Далее|Фото профиля|Выбрать фото|Готово|Пропустить|Каналы|Группы|Контакты|Настройки|Выйти",
+es:"Elige tu idioma|Continuar|Identidad|Editar correo|Confirmar correo|Esperando tu código|Código de verificación|Verificar|Nombre|Apellido|Siguiente|Foto de perfil|Elegir foto|Terminar|Omitir|Canales|Grupos|Contactos|Ajustes|Salir"};
+const LANGS=[["en","English"],["fa","فارسی"],["ps","پښتو"],["ar","العربية"],["ur","اردو"],["tr","Türkçe"],["zh","中文"],["ru","Русский"],["es","Español"],["fr","Français"],["de","Deutsch"],["hi","हिन्दी"],["pt","Português"],["id","Indonesia"],["ja","日本語"],["ko","한국어"],["it","Italiano"]];
+const RTL=["fa","ps","ar","ur"];
+const t=k=>{const i=K.indexOf(k);return ((T[L]||T.en).split('|')[i])||T.en.split('|')[i]};
+function applyLang(){
+  document.documentElement.lang=L;document.documentElement.dir=RTL.includes(L)?'rtl':'ltr';
+  $$('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
+  $$('[data-p]').forEach(e=>e.placeholder=t(e.dataset.p));
 }
-function age(d){const b=new Date(d),n=new Date();let a=n.getFullYear()-b.getFullYear();
-  if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a;}
 
-async function sendCode(){
-  email=$("email").value.trim().toLowerCase();
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return say("Enter a valid email.");
-  $("send").disabled=true;say("");
-  const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:window.location.origin+window.location.pathname}});
-  $("send").disabled=false;
-  if(error)return say(error.message);
-  show(2);cooldown(60);say("Email sent. Check your inbox and spam.",true);
+/* ---------- artwork (drawn in code) ---------- */
+const pine=(x,y,s,c)=>`<g transform="translate(${x} ${y}) scale(${s})" fill="${c}"><path d="M0-90 28-40H12L38 0H14L44 44H-44L-14 0H-38L-12-40H-28Z"/><rect x="-5" y="44" width="10" height="22"/></g>`;
+const S0=`<svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice"><defs>
+<linearGradient id="a0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d0a24"/><stop offset=".55" stop-color="#6b2a3a"/><stop offset="1" stop-color="#e8782a"/></linearGradient>
+<radialGradient id="e0"><stop offset="0" stop-color="#fff3a0"/><stop offset="1" stop-color="#ff3b00" stop-opacity="0"/></radialGradient></defs>
+<rect width="400" height="800" fill="url(#a0)"/>
+<circle cx="300" cy="150" r="80" fill="#ffe9b0" opacity=".12"/><circle cx="300" cy="150" r="46" fill="#ffe9b0"/>
+<path d="M0 420Q90 340 200 400T400 380V800H0Z" fill="#1c1420"/>
+${pine(40,380,1.4,'#0b1a12')}${pine(350,370,1.6,'#0b1a12')}${pine(120,405,.9,'#10241a')}${pine(280,410,1,'#10241a')}
+<path d="M0 520Q200 470 400 520V800H0Z" fill="#0f2417"/>
+<g><ellipse cx="105" cy="500" rx="85" ry="42" fill="#e07b1a"/>
+<path d="M40 520l-6 28h24l6-26zM150 525l4 24h24l-6-26z" fill="#c96510"/>
+<path d="M22 490Q-14 470 2 430" stroke="#e07b1a" stroke-width="14" fill="none" stroke-linecap="round"/>
+<path d="M70 465l6 32M95 462l5 36M120 464l4 34M145 470l2 30" stroke="#2b1208" stroke-width="6" stroke-linecap="round"/>
+<circle cx="185" cy="462" r="34" fill="#e8851f"/>
+<path d="M160 438l-6-28 24 14zM205 432l10-26 14 22z" fill="#e8851f"/>
+<ellipse cx="212" cy="476" rx="18" ry="13" fill="#f6dcb4"/><circle cx="226" cy="470" r="4" fill="#3a1a14"/>
+<circle cx="199" cy="458" r="11" fill="url(#e0)"/><ellipse cx="199" cy="458" rx="5" ry="3.5" fill="#ffd400"/><circle cx="200" cy="458" r="1.6" fill="#000"/>
+<path d="M184 447l26 9" stroke="#2b1208" stroke-width="4.5" stroke-linecap="round"/>
+<path d="M208 485l3 10 3-10zM218 485l3 10 3-10z" fill="#fff"/></g>
+<g><path d="M275 512l-2 36M290 516l-2 32M325 516l2 32M340 512l3 36" stroke="#a8743f" stroke-width="6" stroke-linecap="round"/>
+<ellipse cx="305" cy="495" rx="48" ry="26" fill="#c8935a"/>
+<path d="M335 482Q352 440 350 405L366 400Q374 440 352 494Z" fill="#c8935a"/>
+<ellipse cx="362" cy="398" rx="20" ry="11" transform="rotate(-20 362 398)" fill="#d1a068"/>
+<ellipse cx="349" cy="386" rx="5" ry="11" transform="rotate(-35 349 386)" fill="#c8935a"/>
+<circle cx="367" cy="394" r="2.6" fill="#111"/><circle cx="376" cy="402" r="2" fill="#3a1a14"/>
+<g fill="#fff" opacity=".85"><circle cx="290" cy="485" r="3"/><circle cx="305" cy="480" r="3"/><circle cx="320" cy="490" r="3"/><circle cx="298" cy="500" r="3"/><circle cx="315" cy="503" r="3"/></g>
+<path d="M258 485l-10-8 4 12z" fill="#fff"/></g>
+<path d="M0 640Q100 600 200 650T400 630V800H0Z" fill="#071a0e"/></svg>`;
+const S1=`<svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice"><defs>
+<linearGradient id="a1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#06141a"/><stop offset=".5" stop-color="#1c4a45"/><stop offset="1" stop-color="#d9a35a"/></linearGradient></defs>
+<rect width="400" height="800" fill="url(#a1)"/><circle cx="200" cy="330" r="60" fill="#fff0c0" opacity=".25"/>
+${pine(60,360,1.1,'#0a2018')}${pine(340,350,1.2,'#0a2018')}${pine(20,470,1.7,'#06140f')}${pine(385,470,1.8,'#06140f')}${pine(110,560,2.3,'#041009')}${pine(300,580,2.5,'#041009')}
+<path d="M150 800L250 800 212 380 188 380Z" fill="#c9a878" opacity=".85"/><path d="M190 800L210 800 203 380 197 380Z" fill="#fff3d0" opacity=".25"/>
+<rect y="380" width="400" height="60" fill="#d9ecdc" opacity=".12"/>
+<g fill="#ffe27a"><circle cx="90" cy="520" r="2.5"/><circle cx="310" cy="480" r="2.5"/><circle cx="150" cy="430" r="2"/><circle cx="270" cy="560" r="2.5"/></g></svg>`;
+const S2=`<svg viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice"><defs>
+<linearGradient id="a2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1d3a"/><stop offset="1" stop-color="#3b8f8a"/></linearGradient>
+<linearGradient id="b2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a7f90"/><stop offset="1" stop-color="#06222e"/></linearGradient></defs>
+<rect width="400" height="800" fill="url(#a2)"/><circle cx="270" cy="250" r="44" fill="#fff4cf"/><circle cx="270" cy="250" r="90" fill="#fff4cf" opacity=".1"/>
+<rect y="440" width="400" height="360" fill="url(#b2)"/>
+<g stroke="#bfe9ee" stroke-opacity=".35" fill="none" stroke-width="2"><path d="M0 500Q50 490 100 500T200 500T300 500T400 500"/><path d="M0 560Q50 548 100 560T200 560T300 560T400 560"/><path d="M0 630Q50 616 100 630T200 630T300 630T400 630"/></g>
+<ellipse cx="270" cy="470" rx="34" ry="5" fill="#fff4cf" opacity=".5"/><ellipse cx="270" cy="495" rx="22" ry="4" fill="#fff4cf" opacity=".35"/>
+${pine(40,420,1.5,'#06160f')}${pine(0,520,2.2,'#04100a')}${pine(370,430,1.4,'#06160f')}${pine(400,540,2.4,'#04100a')}
+<path d="M0 760Q120 700 220 750T400 730V800H0Z" fill="#050f0a"/></svg>`;
+$('#bg0').innerHTML=S0;$('#bg1').innerHTML=S1;$('#bg2').innerHTML=S2;
+
+/* ---------- helpers ---------- */
+function go(n){
+  $$('.s').forEach(e=>e.classList.toggle('on',e.id==='s'+n));
+  const m={0:0,1:1,2:2,3:1,4:2};
+  $$('.bg').forEach(e=>e.classList.toggle('on',m[n]!==undefined&&e.id==='bg'+m[n]));
 }
-$("send").onclick=sendCode;
-$("resend").onclick=sendCode;
+const say=(id,tx,ok)=>{const e=$(id);e.textContent=tx||'';e.style.color=ok?'#7CFC9A':'#ff9a9a'};
+const okMail=v=>/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v);
 
-$("verify").onclick=async()=>{
-  const token=$("code").value.trim();
-  if(token.length<6)return say("Enter the code.");
-  $("verify").disabled=true;
-  const {data,error}=await sb.auth.verifyOtp({email,token,type:"email"});
-  $("verify").disabled=false;
-  if(error)return say("Invalid or expired code.");
-  say("");route(data.user);
+/* ---------- 1. language ---------- */
+let chosen=null;
+LANGS.forEach(([c,n])=>{
+  const b=document.createElement('button');b.className='leaf';b.textContent=n;
+  b.onclick=()=>{chosen=c;L=c;$$('.leaf').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');$('#goLang').disabled=false;applyLang();};
+  $('#leaves').append(b);
+});
+$('#goLang').onclick=()=>go(1);
+
+/* ---------- 2. email ---------- */
+$('#editMail').onclick=()=>{$('#em').focus();$('#em').select();};
+async function sendMail(){
+  email=$('#em').value.trim().toLowerCase();
+  if(!okMail(email))return say('#m1','Enter a valid email.');
+  $('#confirm').disabled=true;
+  const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}});
+  $('#confirm').disabled=false;
+  if(error)return say('#m1',error.message);
+  say('#m1','');$('#mailShow').textContent=email;go(2);cool(60);
+}
+$('#confirm').onclick=sendMail;
+$('#resend').onclick=sendMail;
+$('#back2').onclick=()=>go(1);
+function cool(s){
+  const b=$('#resend');b.disabled=true;clearInterval(tm);
+  tm=setInterval(()=>{if(s<=0){clearInterval(tm);b.disabled=false;b.textContent=t('confirm');}else b.textContent=t('confirm')+' ('+s+')';s--;},1000);
+}
+
+/* ---------- 3. code ---------- */
+$('#verify').onclick=async()=>{
+  const token=$('#code').value.trim();
+  if(token.length<6)return say('#m2','Enter the code. (If your email has a link instead, tap the link.)');
+  $('#verify').disabled=true;
+  const {data,error}=await sb.auth.verifyOtp({email,token,type:'email'});
+  $('#verify').disabled=false;
+  if(error)return say('#m2','Invalid or expired code.');
+  after(data.user);
 };
 
-async function route(user){
-  const {data}=await sb.from("profiles").select("*").eq("id",user.id).maybeSingle();
-  if(!data){show(3);return;}
-  if(data.is_banned){await sb.auth.signOut();show(1);return say("This account is banned.");}
-  $("hello").textContent=`Welcome, ${data.first_name||""} ${data.last_name||""}`;
-  $("info").textContent=`ID: @${data.public_id} · ${data.country||""} ${data.city||""}`;
-  show(4);
+/* ---------- 4. after sign-in ---------- */
+async function after(user){
+  uid=user.id;
+  const {data}=await sb.from('profiles').select('*').eq('id',uid).maybeSingle();
+  prof=data;
+  if(!prof)return go(3);
+  if(prof.is_banned){await sb.auth.signOut();say('#m1','This account is banned.');return go(1);}
+  openApp();
 }
+sb.auth.onAuthStateChange((ev,s)=>{if(ev==='SIGNED_IN'&&s&&!uid)after(s.user);});
 
-$("save").onclick=async()=>{
-  const v={first_name:$("fn").value.trim(),last_name:$("ln").value.trim(),
-    public_id:$("pid").value.trim(),birth_date:$("bd").value,gender:$("gd").value,
-    country:$("co").value.trim(),city:$("ci").value.trim()};
-  if(!v.first_name||!v.last_name)return say("Enter first and last name.");
-  if(!/^[A-Za-z0-9_]{3,32}$/.test(v.public_id))return say("ID must be 3-32 letters, numbers or _.");
-  if(!v.birth_date)return say("Enter date of birth.");
-  if(age(v.birth_date)<MIN_AGE)return say(`You must be at least ${MIN_AGE} years old.`);
-  const {data:{user}}=await sb.auth.getUser();
-  if(!user)return say("Session expired. Sign in again.");
-  $("save").disabled=true;
-  const {error}=await sb.from("profiles").insert({id:user.id,...v});
-  $("save").disabled=false;
-  if(error){
-    if(error.code==="23505")return say("This ID is already taken.");
-    if(/reserved/i.test(error.message))return say("This ID is reserved.");
-    return say(error.message);
+/* ---------- 5. name ---------- */
+$('#next').onclick=async()=>{
+  const fn=$('#fn').value.trim(),ln=$('#ln').value.trim();
+  if(!fn||!ln)return say('#m3','Enter first and last name.');
+  $('#next').disabled=true;let r;
+  if(prof)r=await sb.from('profiles').update({first_name:fn,last_name:ln}).eq('id',uid).select().single();
+  else{
+    const pid='u'+Math.random().toString(36).slice(2,10);
+    r=await sb.from('profiles').insert({id:uid,public_id:pid,first_name:fn,last_name:ln,language:L}).select().single();
   }
-  say("");route(user);
+  $('#next').disabled=false;
+  if(r.error)return say('#m3',r.error.message);
+  prof=r.data;go(4);
 };
 
-$("out").onclick=async()=>{await sb.auth.signOut();show(1);say("");};
+/* ---------- 6. photo ---------- */
+$('#choose').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  if(f.size>2097152)return say('#m4','Max 2 MB.');
+  pfile=f;const p=$('#pv');p.textContent='';p.style.backgroundImage=`url(${URL.createObjectURL(f)})`;say('#m4','');
+};
+$('#skip').onclick=openApp;
+$('#finish').onclick=async()=>{
+  if(pfile){
+    $('#finish').disabled=true;
+    const ext=(pfile.type.split('/')[1]||'jpg').replace('jpeg','jpg');
+    const path=uid+'/'+Date.now()+'.'+ext;
+    const up=await sb.storage.from('avatars').upload(path,pfile,{contentType:pfile.type});
+    if(up.error){$('#finish').disabled=false;return say('#m4','Photo storage is not set up yet. You can skip and add it later.');}
+    const url=sb.storage.from('avatars').getPublicUrl(path).data.publicUrl;
+    const r=await sb.from('profiles').update({avatar_url:url}).eq('id',uid).select().single();
+    if(r.data)prof=r.data;$('#finish').disabled=false;
+  }
+  openApp();
+};
 
-(async()=>{
-  const {data:{session}}=await sb.auth.getSession();
-  if(session)route(session.user);
-})();
-</script>
-</body>
-</html>
+/* ---------- 7. main app (4 tabs) ---------- */
+function row(title,sub,img){
+  const r=document.createElement('div');r.className='row';
+  const a=document.createElement('div');a.className='av';
+  if(img)a.style.backgroundImage=`url(${img})`;else a.textContent=(title||'?').trim().charAt(0).toUpperCase();
+  const b=document.createElement('div');const n=document.createElement('div');n.textContent=title;
+  const s=document.createElement('small');s.textContent=sub||'';b.append(n,s);r.append(a,b);return r;
+}
+const note=(box,tx)=>{const d=document.createElement('div');d.className='note';d.textContent=tx;box.append(d);};
+function openApp(){$$('.bg').forEach(e=>e.classList.remove('on'));go(5);tab(0);}
+function tab(n){
+  $$('#nav button').forEach((b,i)=>b.classList.toggle('on',i===n));
+  const box=$('#list');box.innerHTML='';
+  if(n<2)chats(n?'group':'channel',box);else if(n===2)people(box);else settings(box);
+}
+$$('#nav button').forEach((b,i)=>b.onclick=()=>tab(i));
+async function chats(kind,box){
+  const {data,error}=await sb.from('chats').select('title,handle,is_official').eq('kind',kind).order('created_at');
+  if(error)return note(box,'Not set up yet: run the Newgram database SQL in Supabase.');
+  if(!data.length)return note(box,'Nothing here yet.');
+  data.forEach(c=>box.append(row(c.title+(c.is_official?' ✔':''),c.handle?'@'+c.handle:'')));
+}
+function people(box){
+  const i=document.createElement('input');i.placeholder='@id / name';box.append(i);
+  const out=document.createElement('div');out.style.marginTop='10px';box.append(out);
+  const run=async()=>{
+    out.innerHTML='';const q=i.value.trim().replace(/[%,]/g,'');
+    let rq=sb.from('profiles').select('public_id,first_name,last_name,avatar_url').neq('id',uid).limit(30);
+    if(q)rq=rq.or(`public_id.ilike.%${q}%,first_name.ilike.%${q}%,last_name.ilike.%${q}%`);
+    const {data,error}=await rq;
+    if(error)return note(out,error.message);
+    if(!data.length)return note(out,'No one found.');
+    data.forEach(p=>out.append(row(((p.first_name||'')+' '+(p.last_name||'')).trim(),'@'+p.public_id,p.avatar_url)));
+  };
+  let d;i.oninput=()=>{clearTimeout(d);d=setTimeout(run,300)};run();
+}
+async function settings(box){
+  const u=(await sb.auth.getUser()).data.user;
+  box.append(row(((prof.first_name||'')+' '+(prof.last_name||'')).trim(),'@'+prof.public_id+' · '+(u?u.email:''),prof.avatar_url));
+  co
